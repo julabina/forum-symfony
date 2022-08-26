@@ -29,7 +29,7 @@ class TopicController extends AbstractController
     }
 
     #[Route('/forum/{catId}/{subId}/{id}', name:'app_topic_show')]
-    public function listTopic(
+    public function showTopic(
         $catId, 
         $subId, 
         Topics $topic, 
@@ -60,8 +60,10 @@ class TopicController extends AbstractController
             $message = $form->getData();
             $message->setTopic($topic)
                 ->setUser($this->getUser());
+            $topic->setUpdatedAt(new \DateTimeImmutable());
                 
             $manager->persist($message);
+            $manager->persist($topic);
             $manager->flush();
 
             return $this->redirectToRoute('app_topic_show', ['catId' => $catId, 'subId' => $subId, 'id' => $topic->getId()]);
@@ -119,7 +121,10 @@ class TopicController extends AbstractController
         $cat = $catRepository->findOneBy(['id' => $catId]);
 
         $topics = $paginator->paginate(
-            $repository->findBy(['subCategory' => $sub->getId()]),
+            $repository->findBy(
+                ['subCategory' => $sub->getId()], 
+                ['updatedAt' => 'DESC']
+            ),
             $request->query->getInt('page', 1),
             10
         );

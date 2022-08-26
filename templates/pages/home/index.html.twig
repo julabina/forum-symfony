@@ -7,6 +7,13 @@
     <h1>Accueil</h1>
 
     <a href="{{ path('app_forum_list') }}">Forum</a>
+    {% if app.user %}
+        <a href="{{ path('app_logout') }}"><button>Se deconnecter</button></a>
+    {% else %}
+        <a href="{{ path('app_login') }}"><button>Se connecter</button></a>
+        <a href="{{ path('app_sign') }}"><button>Creer un compte</button></a>
+    {% endif %}
+    
     
 </main>
 {% endblock %}
