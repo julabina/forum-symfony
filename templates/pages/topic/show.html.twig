@@ -8,7 +8,10 @@
         {% if subject.subTitle %}
             <h2>{{ subject.subTitle }}</h2>
         {% endif %}
-        <p><a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > <a href="{{ path('app_sub_show', { 'catId': catId, 'id': subId }) }}">{{ subTitle }}</a> > {{ subject.title }}</p>
+        <p><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > <a href="{{ path('app_sub_show', { 'catId': catId, 'id': subId }) }}">{{ subTitle }}</a> > {{ subject.title }}</p>
+        <div class="navigation">
+            {{ knp_pagination_render(responses) }}
+        </div>
         <section style="border:4px solid black; padding:15px;width: 800px;">
             <p>{{ subject.mainContent }}</p>
             <div style="display:flex;justify-content:space-between;">
@@ -17,9 +20,6 @@
             </div>
         </section>
         <section>
-        <div class="navigation">
-            {{ knp_pagination_render(responses) }}
-        </div>
         {% for response in responses %}
             <article style="border:1px solid black; padding:15px;width: 800px;">
                 <div>

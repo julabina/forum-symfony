@@ -5,8 +5,14 @@
 {% block body %}
 <main>
     <h1>Sujet de {{ subCatTitle }}</h1>
-    <p><a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > {{ subCatTitle }}</p>
+    <p><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > {{ subCatTitle }}</p>
     <section>
+        <div class="" style="display:flex; justify-content:space-between;width: 1000px;">
+            <div class="navigation">
+                {{ knp_pagination_render(topics) }}
+            </div>
+            <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button>Creer un sujet</button></a>
+        </div>
         {% for topic in topics %}
         <a href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': topic.id }) }}">
             <article style="border:1px solid black; padding:15px;width: 1000px;display: flex;justify-content:space-between;">
@@ -19,9 +25,11 @@
             </article>
         </a>
         {% endfor %}
-
-        <div class="navigation">
-            {{ knp_pagination_render(topics) }}
+        <div class="" style="display:flex; justify-content:space-between;width: 1000px;">
+            <div class="navigation">
+                {{ knp_pagination_render(topics) }}
+            </div>
+            <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button>Creer un sujet</button></a>
         </div>
     </section>
 </main>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Categories;
 use App\Entity\SubCategories;
 use App\Entity\Topics;
+use App\Form\NewTopicType;
 use App\Form\TopicResponseType;
 use App\Repository\CategoriesRepository;
 use App\Repository\SubCategoriesRepository;
@@ -58,10 +59,12 @@ class TopicController extends AbstractController
             
             $message = $form->getData();
             $message->setTopic($topic)
-                ->setUser($topic->getUser());
+                ->setUser($this->getUser());
                 
             $manager->persist($message);
             $manager->flush();
+
+            return $this->redirectToRoute('app_topic_show', ['catId' => $catId, 'subId' => $subId, 'id' => $topic->getId()]);
         }
 
         return $this->render('pages/topic/show.html.twig',[
@@ -71,6 +74,31 @@ class TopicController extends AbstractController
             'catTitle' => $cat->getTitle(),
             'subId' => $sub->getId(),
             'subTitle' => $sub->getTitle(),
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/new/forum/{catId}/{subId}', name:'app_newTopic')]
+    public function new(Categories $catId,SubCategories $subId, Request $request, EntityManagerInterface $manager): Response {
+
+        $form = $this->createForm(NewTopicType::class);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $topic = $form->getData();
+            $topic->setIsActive(0)
+                ->setSubCategory($subId)
+                ->setUser($this->getUser())
+            ;
+            
+            $manager->persist($topic);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_sub_show', ['catId' => $catId->getId(), 'id' => $subId->getId() ]);
+        }
+
+        return $this->render("pages/topic/new.html.twig", [
             'form' => $form->createView()
         ]);
     }
