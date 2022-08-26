@@ -5,7 +5,7 @@
 {% block body %}
 <main>
     <h1>Sujet de {{ subCatTitle }}</h1>
-
+    <p><a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > {{ subCatTitle }}</p>
     <section>
         {% for topic in topics %}
         <a href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': topic.id }) }}">

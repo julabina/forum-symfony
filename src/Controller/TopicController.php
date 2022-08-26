@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Categories;
 use App\Entity\SubCategories;
 use App\Entity\Topics;
+use App\Repository\CategoriesRepository;
 use App\Repository\SubCategoriesRepository;
 use App\Repository\TopicResponsesRepository;
 use App\Repository\TopicsRepository;
@@ -17,6 +18,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class TopicController extends AbstractController
 {
 
+    #[Route('/forum', name:'app_forum_list')]
+    public function listForum(CategoriesRepository $repository): Response {
+        return $this->render('pages/topic/forumList.html.twig', [
+            'categories' => $repository->findAll()
+         ]);
+    }
+
     #[Route('/forum/{catId}/{subId}/{id}', name:'app_topic_show')]
     public function listTopic(
         $catId, 
@@ -24,10 +32,15 @@ class TopicController extends AbstractController
         Topics $topic, 
         TopicsRepository $topicRepository, 
         TopicResponsesRepository $responseRepository, 
+        CategoriesRepository $catRepository,
+        SubCategoriesRepository $subRepository,
         PaginatorInterface $paginator,
         Request $request
         ): Response 
     {
+
+        $cat = $catRepository->findOneBy(['id' => $catId]);
+        $sub = $subRepository->findOneBy(['id' => $subId]);
 
         $messages = $paginator->paginate(
             $responseRepository->findBy(['topic' => $topic->getId()]),
@@ -37,7 +50,11 @@ class TopicController extends AbstractController
 
         return $this->render('pages/topic/show.html.twig',[
             'responses' => $messages,
-            'subject' => $topicRepository->findOneBy(['id' => $topic->getId()])
+            'subject' => $topicRepository->findOneBy(['id' => $topic->getId()]),
+            'catId' => $cat->getId(),
+            'catTitle' => $cat->getTitle(),
+            'subId' => $sub->getId(),
+            'subTitle' => $sub->getTitle(),
         ]);
     }
 
@@ -52,7 +69,9 @@ class TopicController extends AbstractController
     }
 
     #[Route('/forum/{catId}/{id}', name: 'app_sub_show')]
-    public function showSub($catId , SubCategories $sub, TopicsRepository $repository, PaginatorInterface $paginator, Request $request): Response {
+    public function showSub($catId , SubCategories $sub, TopicsRepository $repository, CategoriesRepository $catRepository, PaginatorInterface $paginator, Request $request): Response {
+
+        $cat = $catRepository->findOneBy(['id' => $catId]);
 
         $topics = $paginator->paginate(
             $repository->findBy(['subCategory' => $sub->getId()]),
@@ -64,7 +83,8 @@ class TopicController extends AbstractController
             'topics' => $topics,
             'subCatTitle' => $sub->getTitle(),
             'subCatId' => $sub->getId(),
-            'catId' => $catId
+            'catId' => $cat->getId(),
+            'catTitle' => $cat->getTitle()
         ]);
     }
 }
