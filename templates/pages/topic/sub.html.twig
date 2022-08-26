@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - Sujet de {{ subCatTitle }}{% endblock %}
+
+{% block body %}
+<main>
+    <h1>Sujet de {{ subCatTitle }}</h1>
+
+    <section>
+        {% for topic in topics %}
+        <a href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': topic.id }) }}">
+            <article style="border:1px solid black; padding:15px;width: 1000px;display: flex;justify-content:space-between;">
+                <div>
+                    <h2>{{ topic.title }}</h2>
+                    <p>{{ topic.subTitle }}</p>
+                </div>
+                <p>Créer par {{ topic.user.pseudo }}</p>
+                <p>Dernière mise à jour le {{ topic.updatedAt|date('d/m/Y à m:h:s') }}</p>
+            </article>
+        </a>
+        {% endfor %}
+
+        <div class="navigation">
+            {{ knp_pagination_render(topics) }}
+        </div>
+    </section>
+</main>
+{% endblock %}

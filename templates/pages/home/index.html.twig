@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - Accueil{% endblock %}
+
+{% block body %}
+<main>
+    <h1>Accueil</h1>
+    <section>
+    {% for category in categories %}
+    <a href="{{ path('app_cat_show', { 'id': category.id }) }}">
+        <div style="border:1px solid black; padding:15px;width: 400px;">
+            <h2>{{ category.title }}</h2>
+            <p>{{ category.description }}</p>
+        </div>    
+    </a>
+    {% endfor %}
+    </section>
+</main>
+{% endblock %}

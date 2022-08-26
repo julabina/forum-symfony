@@ -88,14 +88,16 @@ class AppFixtures extends Fixture
         }
 
         // topics response 
-
+        
         foreach ($topics as $topic) {
             for ($n=0; $n < mt_rand(1, 75); $n++) { 
                 $resp = new TopicResponses();
                 $resp->setContent($this->faker->text(mt_rand(25, 400)))
-                    ->setTopic($topic)
-                    ->setUser($users[mt_rand(0, count($users) - 1)])
+                ->setTopic($topic)
+                ->setUser($users[mt_rand(0, count($users) - 1)])
                 ;
+
+                $manager->persist($resp);
             }
         }
 

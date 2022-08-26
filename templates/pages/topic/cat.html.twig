@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - Sous categorie de {{ catTitle }}{% endblock %}
+
+{% block body %}
+<main>
+    <h1>Sous categorie de {{ catTitle }}</h1>
+    <section>
+    {% for subCat in subCategories %}
+        <a href="{{ path('app_sub_show', { 'catId': catId, 'id': subCat.id }) }}">
+        <div style="border:1px solid black; padding:15px;width: 400px;">
+            <h2>{{ subCat.title }}</h2>
+            <p>{{ subCat.description }}</p>
+        </div>
+        </a>
+    {% endfor %}
+    </section>
+</main>
+{% endblock %}
