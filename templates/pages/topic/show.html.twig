@@ -22,7 +22,9 @@
         </div>
         {% for response in responses %}
             <article style="border:1px solid black; padding:15px;width: 800px;">
-                <p>{{ response.content }}</p>
+                <div>
+                    {{ response.content|raw }}
+                </div>
                 <div style="display:flex;justify-content:space-between;">
                     <p>{{ response.updatedAt|date('d/m/Y à m:h:s') }}</p>
                     <p>{{ response.user.pseudo }}</p>
@@ -32,6 +34,9 @@
         <div class="navigation">
             {{ knp_pagination_render(responses) }}
         </div>
+        </section>
+        <section>
+            {{ form(form) }}
         </section>
     </main>
 {% endblock %}

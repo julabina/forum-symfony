@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Categories;
 use App\Entity\SubCategories;
 use App\Entity\Topics;
+use App\Form\TopicResponseType;
 use App\Repository\CategoriesRepository;
 use App\Repository\SubCategoriesRepository;
 use App\Repository\TopicResponsesRepository;
 use App\Repository\TopicsRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,18 +37,32 @@ class TopicController extends AbstractController
         CategoriesRepository $catRepository,
         SubCategoriesRepository $subRepository,
         PaginatorInterface $paginator,
-        Request $request
+        Request $request,
+        EntityManagerInterface $manager,
         ): Response 
     {
 
         $cat = $catRepository->findOneBy(['id' => $catId]);
         $sub = $subRepository->findOneBy(['id' => $subId]);
 
+        $form = $this->createForm(TopicResponseType::class);
+        $form->handleRequest($request);
+
         $messages = $paginator->paginate(
             $responseRepository->findBy(['topic' => $topic->getId()]),
             $request->query->getInt('page', 1),
             10
         );
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $message = $form->getData();
+            $message->setTopic($topic)
+                ->setUser($topic->getUser());
+                
+            $manager->persist($message);
+            $manager->flush();
+        }
 
         return $this->render('pages/topic/show.html.twig',[
             'responses' => $messages,
@@ -55,6 +71,7 @@ class TopicController extends AbstractController
             'catTitle' => $cat->getTitle(),
             'subId' => $sub->getId(),
             'subTitle' => $sub->getTitle(),
+            'form' => $form->createView()
         ]);
     }
 
