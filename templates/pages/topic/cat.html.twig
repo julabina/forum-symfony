@@ -10,8 +10,23 @@
     {% for subCat in subCategories %}
         <a href="{{ path('app_sub_show', { 'catId': catId, 'id': subCat.id }) }}">
         <div style="border:1px solid black; padding:15px;width: 400px;">
-            <h2>{{ subCat.title }}</h2>
-            <p>{{ subCat.description }}</p>
+            <div>
+                <h2>{{ subCat.title }}</h2>
+                <p>{{ subCat.description }}</p>
+            </div>
+            <div>
+                <p>{{ subCat.topics|length }} sujets</p>
+            </div>
+            <div>
+                <p>Dernier sujet : </p>
+                <div style="display:flex;">
+                    <p>
+                        {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.title }}
+                        le {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:m:s') }}
+                    </p>
+                    <p>par {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
+                </div>
+            </div>
         </div>
         </a>
     {% endfor %}

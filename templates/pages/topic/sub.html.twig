@@ -23,7 +23,15 @@
                     <p>{{ topic.subTitle }}</p>
                 </div>
                 <p>Créer par {{ topic.user.pseudo }}</p>
-                <p>Dernière mise à jour le {{ topic.updatedAt|date('d/m/Y à m:h:s') }}</p>
+                <p>{{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|length }} Réponses</p>
+                {% if topic.topicResponses|length is not same as 0 %}
+                    <div>
+                        <p>Dernier message par {{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
+                        <p>le {{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:m:s') }}</p>
+                    </div>
+                {% else %}
+                    <p>Pas encore de réponse</p>
+                {% endif %}
             </article>
         </a>
         {% endfor %}
