@@ -3,6 +3,11 @@
 {% block title %}Forum - {{ subject.title }}{% endblock %}
 
 {% block body %}
+    <style>
+        .message__form--hidden {
+            display:none;
+        }
+    </style>
     <main>
         <h1>{{ subject.title }}</h1>
         {% if subject.subTitle %}
@@ -29,6 +34,15 @@
                     <p>{{ response.updatedAt|date('d/m/Y à m:h:s') }}</p>
                     <p>{{ response.user.pseudo }}</p>
                 </div>
+                {% if app.user is same as response.user %}
+                    <div>
+                        <button onClick="displayMessageForm({{ loop.index }})">Modifier</button>
+                        <a href=""><button>Supprimer</button></a>
+                    </div>  
+                    <div class="message__form{{ loop.index }} message__form--hidden">
+                        {# {{ form(form[loop.index]) }} #}
+                    </div>
+                {% endif %}
             </article>    
         {% endfor %}
         <div class="navigation">
@@ -37,7 +51,7 @@
         </section>
         <section>
             {% if app.user %}
-            {{ form(form) }}
+                {{ form(form) }}
             {% else %}
             <div class="" style="width: 800px;text-align:center;padding: 40px 0;border:2px solid black;">
                 <p>Vous devez etre connecter pour poster</p>
@@ -45,4 +59,14 @@
             {% endif %}
         </section>
     </main>
+    <script>
+        const displayMessageForm = (repId) => {
+            const message = document.querySelector('.message__form' + repId);
+            if(message.classList.contains('message__form--hidden')) {
+                message.classList.remove('message__form--hidden');
+            } else {
+                message.classList.add('message__form--hidden');
+            }
+        }
+    </script>
 {% endblock %}

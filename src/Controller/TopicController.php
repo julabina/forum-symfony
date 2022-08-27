@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Categories;
 use App\Entity\SubCategories;
+use App\Entity\TopicResponses;
 use App\Entity\Topics;
 use App\Form\NewTopicType;
 use App\Form\TopicResponseType;
+use App\Form\TopicResponseMessageType;
 use App\Repository\CategoriesRepository;
 use App\Repository\SubCategoriesRepository;
 use App\Repository\TopicResponsesRepository;
@@ -49,10 +51,23 @@ class TopicController extends AbstractController
         $form = $this->createForm(TopicResponseType::class);
         $form->handleRequest($request);
 
+        $nbrOfTopics = $responseRepository->findBy(['topic' => $topic->getId()]);
+        $lastPage = ceil(count($nbrOfTopics)/10);
+        
         $messages = $paginator->paginate(
             $responseRepository->findBy(['topic' => $topic->getId()]),
-            $request->query->getInt('page', 1),
+            $request->query->getInt('page', $lastPage),
             10
+        );
+
+        $options = array(
+            'responses' => $messages,
+            'subject' => $topicRepository->findOneBy(['id' => $topic->getId()]),
+            'catId' => $cat->getId(),
+            'catTitle' => $cat->getTitle(),
+            'subId' => $sub->getId(),
+            'subTitle' => $sub->getTitle(),
+            'form' => $form->createView(),
         );
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -69,15 +84,7 @@ class TopicController extends AbstractController
             return $this->redirectToRoute('app_topic_show', ['catId' => $catId, 'subId' => $subId, 'id' => $topic->getId()]);
         }
 
-        return $this->render('pages/topic/show.html.twig',[
-            'responses' => $messages,
-            'subject' => $topicRepository->findOneBy(['id' => $topic->getId()]),
-            'catId' => $cat->getId(),
-            'catTitle' => $cat->getTitle(),
-            'subId' => $sub->getId(),
-            'subTitle' => $sub->getTitle(),
-            'form' => $form->createView()
-        ]);
+        return $this->render('pages/topic/show.html.twig', $options);
     }
 
     #[Route('/new/forum/{catId}/{subId}', name:'app_newTopic')]
