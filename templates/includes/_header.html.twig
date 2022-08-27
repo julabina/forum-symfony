@@ -1,0 +1,19 @@
+<header>
+    <nav>
+        <ul>
+            <a href="{{ path('app_home') }}"><li>Accueil</li></a>
+            <a href="{{ path('app_forum_list') }}"><li>Forum</li></a>
+            {% if app.user %}
+                <a href="{{ path('app_profil') }}"><li>profil</li></a>
+            {% endif %}
+        </ul>
+        <ul>
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}"><li>Se deconnecter</li></a>
+            {% else %}
+                <a href="{{ path('app_login') }}"><li>Se connecter</li></a>
+                <a href="{{ path('app_sign') }}"><li>S'enregistrer</li></a>
+            {% endif %}
+        </ul>
+    </nav>
+</header>

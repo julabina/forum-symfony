@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Forum - Modifier profil{% endblock %}
+
+{% block body %}
+<main>
+    <h1>Modifier votre profil</h1>
+
+    {% for message in app.flashes('success') %}
+        <div>
+            {{message}}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div>
+            {{message}}
+        </div>
+    {% endfor %}
+
+    {{ form(form) }}
+</main>
+{% endblock %}

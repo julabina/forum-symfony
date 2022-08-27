@@ -36,7 +36,13 @@
         </div>
         </section>
         <section>
+            {% if app.user %}
             {{ form(form) }}
+            {% else %}
+            <div class="" style="width: 800px;text-align:center;padding: 40px 0;border:2px solid black;">
+                <p>Vous devez etre connecter pour poster</p>
+            </div>
+            {% endif %}
         </section>
     </main>
 {% endblock %}

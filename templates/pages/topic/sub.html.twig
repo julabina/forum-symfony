@@ -11,7 +11,9 @@
             <div class="navigation">
                 {{ knp_pagination_render(topics) }}
             </div>
-            <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button>Creer un sujet</button></a>
+            {% if app.user %}
+                <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button>Creer un sujet</button></a>
+            {% endif %}
         </div>
         {% for topic in topics %}
         <a href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': topic.id }) }}">
@@ -29,7 +31,9 @@
             <div class="navigation">
                 {{ knp_pagination_render(topics) }}
             </div>
-            <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button>Creer un sujet</button></a>
+            {% if app.user %}
+                <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button>Creer un sujet</button></a>
+            {% endif %}
         </div>
     </section>
 </main>
