@@ -22,13 +22,35 @@ use Symfony\Component\Routing\Annotation\Route;
 class TopicController extends AbstractController
 {
 
+    /**
+     * display the forum categories page
+     *
+     * @param CategoriesRepository $repository
+     * @return Response
+     */
     #[Route('/forum', name:'app_forum_list')]
-    public function listForum(CategoriesRepository $repository): Response {
+    public function listForum(CategoriesRepository $repository): Response 
+    {
         return $this->render('pages/topic/forumList.html.twig', [
             'categories' => $repository->findAll()
          ]);
     }
 
+    /**
+     * display one topic page manage response.
+     * 
+     * @param $catId 
+     * @param $subId
+     * @param Topics $topic
+     * @param TopicsRepository $topicRepository
+     * @param TopicResponsesRepository $responseRepository
+     * @param CategoriesRepository $catRepository
+     * @param SubCategoriesRepository $subRepository
+     * @param PaginatorInterface $paginator
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/forum/{catId}/{subId}/{id}', name:'app_topic_show')]
     public function showTopic(
         $catId, 
@@ -41,7 +63,7 @@ class TopicController extends AbstractController
         PaginatorInterface $paginator,
         Request $request,
         EntityManagerInterface $manager,
-        ): Response 
+    ): Response 
     {
 
         $cat = $catRepository->findOneBy(['id' => $catId]);
@@ -91,9 +113,18 @@ class TopicController extends AbstractController
         return $this->render('pages/topic/show.html.twig', $options);
     }
 
+    /**
+     * display adding topic page and manage topics adding
+     * 
+     * @param Categories $catId
+     * @param SubCategories $subId 
+     * @param Request $request,
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/new/forum/{catId}/{subId}', name:'app_newTopic')]
-    public function new(Categories $catId,SubCategories $subId, Request $request, EntityManagerInterface $manager): Response {
-
+    public function new(Categories $catId,SubCategories $subId, Request $request, EntityManagerInterface $manager): Response 
+    {
         $form = $this->createForm(NewTopicType::class);
         $form->handleRequest($request);
         
@@ -119,6 +150,13 @@ class TopicController extends AbstractController
         ]);
     }
 
+    /**
+     * display subCategories on categrory page
+     * 
+     * @param Categories $category 
+     * @param SubCategoriesRepository $repository
+     * @return Response
+     */
     #[Route('/forum/{id}', name: 'app_cat_show')]
     public function showCat(Categories $category, SubCategoriesRepository $repository): Response
     {
@@ -129,9 +167,27 @@ class TopicController extends AbstractController
         ]);
     }
 
+    /**
+     * display all topics from one sub category
+     * 
+     * @param $catId  
+     * @param SubCategories $sub 
+     * @param TopicsRepository $repository 
+     * @param CategoriesRepository $catRepository 
+     * @param PaginatorInterface $paginator
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/forum/{catId}/{id}', name: 'app_sub_show')]
-    public function showSub($catId , SubCategories $sub, TopicsRepository $repository, CategoriesRepository $catRepository, PaginatorInterface $paginator, Request $request): Response {
-
+    public function showSub(
+        $catId, 
+        SubCategories $sub, 
+        TopicsRepository $repository, 
+        CategoriesRepository $catRepository, 
+        PaginatorInterface $paginator, 
+        Request $request
+    ): Response 
+    {
         $cat = $catRepository->findOneBy(['id' => $catId]);
 
         $topics = $paginator->paginate(
@@ -146,7 +202,7 @@ class TopicController extends AbstractController
         
         return $this->render('pages/topic/sub.html.twig', [
             'topics' => $topics,
-            'pinned' => $repository->findBy(['isPinned' => true], ['updatedAt' => 'DESC']),
+            'pinned' => $repository->findBy(['subCategory' => $sub->getId(), 'isPinned' => true], ['updatedAt' => 'DESC']),
             'subCatTitle' => $sub->getTitle(),
             'subCatId' => $sub->getId(),
             'catId' => $cat->getId(),

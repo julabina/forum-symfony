@@ -78,6 +78,8 @@ class AppFixtures extends Fixture
                     ->setSubTitle(mt_rand(0, 1) === 1 ? $this->faker->sentence(mt_rand(1, 7)) : null)
                     ->setMainContent($this->faker->text(350))
                     ->setIsActive(mt_rand(0, 1))
+                    ->setIsPinned(mt_rand(0, 5) === 3 ? 1 : 0)
+                    ->setIsLock(mt_rand(0, 5) === 3 ? 1 : 0)
                     ->setSubCategory($subCat)
                     ->setUser($users[mt_rand(0, count($users) - 1)])
                 ;

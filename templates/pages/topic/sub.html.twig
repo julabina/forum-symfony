@@ -8,26 +8,32 @@
     <p><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > {{ subCatTitle }}</p>
     <section>
         <h2>Sujets épinglés</h2>
-        {% for p in pinned %}
-            <a href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': p.id }) }}">
-            <article style="border:1px solid black; padding:15px;width: 1000px;display: flex;justify-content:space-between;">
-                <div>
-                    <h2>{{ p.title }}</h2>
-                    <p>{{ p.subTitle }}</p>
-                </div>
-                <p>Créer par {{ p.user.pseudo }}</p>
-                <p>{{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|length }} Réponses</p>
-                {% if p.topicResponses|length is not same as 0 %}
-                    <div>
-                        <p>Dernier message par {{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
-                        <p>le {{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:m:s') }}</p>
-                    </div>
-                {% else %}
-                    <p>Pas encore de réponse</p>
-                {% endif %}
+        {% if pinned|length is same as 0 %}
+            <article>
+                <p>Aucun sujet épinglé</p>
             </article>
-        </a>
-        {% endfor %}
+        {% else %}
+            {% for p in pinned %}
+                <a href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': p.id }) }}">
+                <article style="border:1px solid black; padding:15px;width: 1000px;display: flex;justify-content:space-between;">
+                    <div>
+                        <h3>{{ p.title }}</h3>
+                        <p>{{ p.subTitle }}</p>
+                    </div>
+                    <p>Créer par {{ p.user.pseudo }}</p>
+                    <p>{{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|length }} Réponses</p>
+                    {% if p.topicResponses|length is not same as 0 %}
+                        <div>
+                            <p>Dernier message par {{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
+                            <p>le {{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                        </div>
+                    {% else %}
+                        <p>Pas encore de réponse</p>
+                    {% endif %}
+                </article>
+            </a>
+            {% endfor %}
+        {% endif %}
     </section>
     <section>
         <div class="" style="display:flex; justify-content:space-between;width: 1000px;">
@@ -42,7 +48,7 @@
         <a href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': topic.id }) }}">
             <article style="border:1px solid black; padding:15px;width: 1000px;display: flex;justify-content:space-between;">
                 <div>
-                    <h2>{{ topic.title }}</h2>
+                    <h3>{{ topic.title }}</h3>
                     <p>{{ topic.subTitle }}</p>
                 </div>
                 <p>Créer par {{ topic.user.pseudo }}</p>
@@ -50,10 +56,13 @@
                 {% if topic.topicResponses|length is not same as 0 %}
                     <div>
                         <p>Dernier message par {{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
-                        <p>le {{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:m:s') }}</p>
+                        <p>le {{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:i:s') }}</p>
                     </div>
                 {% else %}
-                    <p>Pas encore de réponse</p>
+                    <div>
+                        <p>Créé le {{ topic.createdAt|date('d/m/Y à h:i:s') }}</p>
+
+                    </div>
                 {% endif %}
             </article>
         </a>

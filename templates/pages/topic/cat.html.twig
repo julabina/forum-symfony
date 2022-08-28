@@ -22,7 +22,7 @@
                 <div style="display:flex;">
                     <p>
                         {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.title }}
-                        le {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:m:s') }}
+                        le {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:i:s') }}
                     </p>
                     <p>par {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
                 </div>

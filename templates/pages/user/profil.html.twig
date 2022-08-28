@@ -26,7 +26,7 @@
                         <p>{{ topic.subTitle }}</p>
                     </div>
                     <p>Créer par {{ topic.user.pseudo }}</p>
-                    <p>Dernière mise à jour le {{ topic.updatedAt|date('d/m/Y à m:h:s') }}</p>
+                    <p>Dernière mise à jour le {{ topic.updatedAt|date('d/m/Y à h:i:s') }}</p>
                 </article>
             </a>
         {% endfor %}
