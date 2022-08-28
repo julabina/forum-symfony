@@ -51,6 +51,12 @@ class Topics
     #[ORM\OneToMany(mappedBy: 'topic', targetEntity: TopicResponses::class, orphanRemoval: true)]
     private $topicResponses;
 
+    #[ORM\Column(type: 'boolean')]
+    private $isPinned;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isLock;
+
     public function __construct()
     {
         $this->topicResponses = new ArrayCollection();
@@ -185,6 +191,30 @@ class Topics
                 $topicResponse->setTopic(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIsPinned(): ?bool
+    {
+        return $this->isPinned;
+    }
+
+    public function setIsPinned(bool $isPinned): self
+    {
+        $this->isPinned = $isPinned;
+
+        return $this;
+    }
+
+    public function isIsLock(): ?bool
+    {
+        return $this->isLock;
+    }
+
+    public function setIsLock(bool $isLock): self
+    {
+        $this->isLock = $isLock;
 
         return $this;
     }

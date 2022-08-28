@@ -8,7 +8,6 @@ use App\Entity\TopicResponses;
 use App\Entity\Topics;
 use App\Form\NewTopicType;
 use App\Form\TopicResponseType;
-use App\Form\TopicResponseMessageType;
 use App\Repository\CategoriesRepository;
 use App\Repository\SubCategoriesRepository;
 use App\Repository\TopicResponsesRepository;
@@ -52,8 +51,13 @@ class TopicController extends AbstractController
         $form->handleRequest($request);
 
         $nbrOfTopics = $responseRepository->findBy(['topic' => $topic->getId()]);
-        $lastPage = ceil(count($nbrOfTopics)/10);
-        
+
+        if (count($nbrOfTopics) !== 0) {
+            $lastPage = ceil(count($nbrOfTopics)/10);
+        } else {
+            $lastPage = 1;
+        }       
+            
         $messages = $paginator->paginate(
             $responseRepository->findBy(['topic' => $topic->getId()]),
             $request->query->getInt('page', $lastPage),
@@ -99,8 +103,11 @@ class TopicController extends AbstractController
             $topic->setIsActive(0)
                 ->setSubCategory($subId)
                 ->setUser($this->getUser())
+                ->setIsPinned(0)
+                ->setIsLock(0)
+
             ;
-            
+             
             $manager->persist($topic);
             $manager->flush();
 
@@ -129,7 +136,8 @@ class TopicController extends AbstractController
 
         $topics = $paginator->paginate(
             $repository->findBy(
-                ['subCategory' => $sub->getId()], 
+                ['subCategory' => $sub->getId(),
+                'isPinned' => false], 
                 ['updatedAt' => 'DESC']
             ),
             $request->query->getInt('page', 1),
@@ -138,6 +146,7 @@ class TopicController extends AbstractController
         
         return $this->render('pages/topic/sub.html.twig', [
             'topics' => $topics,
+            'pinned' => $repository->findBy(['isPinned' => true], ['updatedAt' => 'DESC']),
             'subCatTitle' => $sub->getTitle(),
             'subCatId' => $sub->getId(),
             'catId' => $cat->getId(),
