@@ -42,7 +42,7 @@ class SecurityController extends AbstractController
      * @return Response
      */
     #[Route('/inscription', name:'app_sign')]
-    public function sign(Request $request, EntityManagerInterface $manager): Response 
+    public function sign(Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(SignType::class);
         $form->handleRequest($request);

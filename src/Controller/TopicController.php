@@ -29,7 +29,7 @@ class TopicController extends AbstractController
      * @return Response
      */
     #[Route('/forum', name:'app_forum_list')]
-    public function listForum(CategoriesRepository $repository): Response 
+    public function listForum(CategoriesRepository $repository): Response
     {
         return $this->render('pages/topic/forumList.html.twig', [
             'categories' => $repository->findAll()
@@ -124,7 +124,7 @@ class TopicController extends AbstractController
      * @return Response
      */
     #[Route('/new/forum/{catId}/{subId}', name:'app_newTopic')]
-    public function new(Categories $catId,SubCategories $subId, Request $request, EntityManagerInterface $manager): Response 
+    public function new(Categories $catId,SubCategories $subId, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(NewTopicType::class);
         $form->handleRequest($request);

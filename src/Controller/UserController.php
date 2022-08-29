@@ -56,7 +56,7 @@ class UserController extends AbstractController
      */
     #[Security("is_granted('ROLE_USER') and user === userChoosen")]
     #[Route('/profil/modifier/{id}', name:'app_profil_edit')]
-    public function editProfil(Users $userChoosen, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response 
+    public function editProfil(Users $userChoosen, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
     {
         $form = $this->createForm(EditProfilType::class, $userChoosen);
         $form->handleRequest($request);
@@ -102,7 +102,7 @@ class UserController extends AbstractController
      */
     #[Security("is_granted('ROLE_USER') and user === userChoosen")]
     #[Route('/profil/password/{id}', name:'app_profil_editPassword')]
-    public function editPassword(Users $userChoosen, Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager): Response 
+    public function editPassword(Users $userChoosen, Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(PasswordEditType::class);
         $form->handleRequest($request);
@@ -146,7 +146,7 @@ class UserController extends AbstractController
      */
     #[Security("is_granted('ROLE_USER') and user === userChoosen")]
     #[Route('/profil/delete/{id}', name:'app_profil_delete')]
-    public function deleteUser(Users $userChoosen, EntityManagerInterface $manager, Request $request): Response 
+    public function deleteUser(Users $userChoosen, EntityManagerInterface $manager, Request $request): Response
     {
         //delete session before delete in db
 
