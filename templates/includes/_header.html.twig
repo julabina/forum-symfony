@@ -12,7 +12,7 @@
             <ul>
                 {% if app.user %}
                     {% if 'ROLE_ADMIN' in app.user.roles %}
-                        <a href=""><li class="header__btn header__btn__right">Administration</li></a>
+                        <a href="{{ path('admin') }}"><li class="header__btn header__btn__right">Administration</li></a>
                     {% endif %}
                     <a href="{{ path('app_logout') }}"><li class="header__btn header__btn__right">Se deconnecter</li></a>
                 {% else %}
