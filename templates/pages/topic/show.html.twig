@@ -9,57 +9,83 @@
         }
     </style>
     <main>
-        <h1>{{ subject.title }}</h1>
-        {% if subject.subTitle %}
-            <h2>{{ subject.subTitle }}</h2>
-        {% endif %}
-        <p><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > <a href="{{ path('app_sub_show', { 'catId': catId, 'id': subId }) }}">{{ subTitle }}</a> > {{ subject.title }}</p>
-        <div class="navigation">
-            {{ knp_pagination_render(responses) }}
+        <section class="topic__top">
+            <p class="topic__top__nav"><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > <a href="{{ path('app_sub_show', { 'catId': catId, 'id': subId }) }}">{{ subTitle }}</a> > {{ subject.title }}</p>
+            <div class="topic__top__nav__sub">
+                <h1>{{ subject.title }}</h1>
+                {% if subject.subTitle %}
+                    <h2>{{ subject.subTitle }}</h2>
+                {% endif %}
+            </div>
+            <div class="topic__top__nav__cont">
+            <div class="topic__top__nav__cont__line"></div>
         </div>
-        <section style="border:4px solid black; padding:15px;width: 800px;">
-            <p>{{ subject.mainContent|raw }}</p>
-            <div style="display:flex;justify-content:space-between;">
-                <p>{{ subject.updatedAt|date('d/m/Y à h:i:s') }}</p>
-                <p>{{ subject.user.pseudo }}</p>
+        </section>
+
+        <section class="topic__pagination">
+            <div class="navigation topic__pagination__nav">
+                {{ knp_pagination_render(responses) }}
             </div>
         </section>
-        <section>
+
+        <section class="topic__subjectCont">
+            <div class="topic__subjectCont__subject">
+                <div class="topic__subjectCont__subject__userInfo">
+                    <p>{{ subject.user.pseudo }}</p>
+                    <div class="topic__subjectCont__subject__userInfo__img"></div>
+                </div>
+                <div class="topic__subjectCont__subject__content">
+                    <p class="topic__subjectCont__subject__content__date">{{ subject.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                    <p class="topic__subjectCont__subject__content__text">{{ subject.mainContent|raw }}</p>
+                </div>
+            </div>
+        </section>
+        <section class="topic__response">
         {% for response in responses %}
-            <article style="border:1px solid black; padding:15px;width: 800px;">
-                <div>
-                    {{ response.content|raw }}
-                </div>
-                <div style="display:flex;justify-content:space-between;">
-                    <p>{{ response.updatedAt|date('d/m/Y à h:i:s') }}</p>
+            <article class="topic__response__article">
+                <div class="topic__response__article__userInfo">
                     <p>{{ response.user.pseudo }}</p>
+                    <div class="topic__subjectCont__subject__userInfo__img"></div>
                 </div>
-                {% if app.user is same as response.user %}
-                    <div>
-                        <button onClick="displayMessageForm({{ loop.index }})">Modifier</button>
-                        <a href=""><button>Supprimer</button></a>
-                    </div>  
-                    <div class="message__form{{ loop.index }} message__form--hidden">
-                        {# {{ form(form[loop.index]) }} #}
+                <div class="topic__response__article__content">
+                    <p class="topic__response__article__content__date">{{ response.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                    <div class="topic__response__article__content__resp">
+                        {{ response.content|raw }}
                     </div>
-                {% endif %}
+                    {% if app.user is same as response.user %}
+                        <div class="topic__response__article__content__userBtn">
+                            <button onClick="displayMessageForm({{ loop.index }})">Modifier</button>
+                            <a href=""><button>Supprimer</button></a>
+                        </div>  
+                    {% endif %}
+                </div>
             </article>    
         {% endfor %}
-        <div class="navigation">
-            {{ knp_pagination_render(responses) }}
-        </div>
         </section>
-        <section>
+        <section class="topic__pagination">
+            <div class="navigation topic__pagination__nav">
+                {{ knp_pagination_render(responses) }}
+            </div>
+        </section>
+        <section class="topic__formSection">
             {% if subject.isLock is same as false %}
                 {% if app.user %}
-                    {{ form(form) }}
+                    {# {{ form(form, { 'attr' : {'class' : 'topic__form'}}) }} #}
+                    <form class="topic__form">
+                        {{ form_widget(form.content) }}
+                        <div class="topic__form__btnCont">
+                            {{ form_widget(form.submit) }}
+                        </div>
+                    </form>
                 {% else %}
-                    <div class="" style="width: 800px;text-align:center;padding: 40px 0;border:2px solid black;">
+                    <div class="topic__form__closed">
                         <p>Vous devez etre connecter pour poster</p>
                     </div>
                 {% endif %}
             {% else %}
-                <p>Ce sujet est clôs, vous ne pouvez plus repondre.</p>
+                <div class="topic__form__closed">
+                    <p>Ce sujet est clôs, vous ne pouvez plus repondre.</p>
+                </div>
             {% endif %}
         </section>
     </main>

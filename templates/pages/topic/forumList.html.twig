@@ -4,12 +4,17 @@
 
 {% block body %}
 <main>
-    <h1>Toutes les categories</h1>
-    <p><a href="{{ path('app_home') }}">Accueil</a> > Forum</p>
-    <section>
+    <section class="cat__top">
+        <p class="cat__top__nav"><a href="{{ path('app_home') }}">Accueil</a> > Forum</p>
+        <h1>Toutes les categories</h1>
+        <div class="cat__top__nav__cont">
+            <div class="cat__top__nav__cont__line"></div>
+        </div>
+    </section>
+    <section class="cat__main">
     {% for category in categories %}
-    <a href="{{ path('app_cat_show', { 'id': category.id }) }}">
-        <div style="border:1px solid black; padding:15px;width: 400px;">
+    <a class="cat__main__link" href="{{ path('app_cat_show', { 'id': category.id }) }}">
+        <div class="cat__main__category">
             <h2>{{ category.title }}</h2>
             <p>{{ category.description }}</p>
         </div>    

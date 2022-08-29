@@ -1,0 +1,39 @@
+.cat {
+    &__top {
+        @include top;
+    }
+    &__main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        &__link {
+            width: 800px;
+            margin-bottom: 40px;
+            &:first-child {
+                margin-top: 80px;
+            }
+        }
+        &__category {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid lightgray;
+            transition: all 150ms ease-in-out;
+            h2 {
+                font-size: 2em;
+                font-weight: 600;
+                margin-top: 20px;
+            }
+            p { 
+                margin-top: 40px;
+                height: 100px;
+                width: 400px;
+                text-align: center;
+            }
+            &:hover {
+                background-color: map-get($map: $colors, $key:gray-very-light );
+                transition: all 150ms ease-in-out;
+            }
+        }
+    }
+}

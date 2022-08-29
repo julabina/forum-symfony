@@ -1,0 +1,124 @@
+@mixin top {
+    display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        color: map-get($map: $colors, $key: white-light);
+        background-color: map-get($map: $colors, $key:secondary );
+        min-height: 200px;
+        padding: 30px 0;
+        &__nav {
+            width: 1200px;
+            letter-spacing: 0.5px;
+            &__cont {
+                width: 1200px;
+                &__line {
+                    z-index: -1;
+                    margin-top: -10px;
+                    height: 8px;
+                    width: 300px;
+                    background: linear-gradient(.25turn, map-get($colors, primary), 70%, transparentize(map-get($colors, primary), 1));
+                }
+            }
+        }
+        h1, h2, &__sub {
+            position: relative;
+            z-index: 0;
+            margin-top: 15px;
+            width: 1200px;
+            font-size: 3em;
+            font-weight: 600;
+        }
+}
+
+@mixin forumTitle {
+    display: flex;
+    align-items: center;
+    width: 1200px;
+    background-color: map-get($map: $colors, $key:secondary );
+    color: map-get($map: $colors, $key:white-light );
+    height: 45px;
+    font-weight: 500;
+    padding-left: 20px;
+}
+
+@mixin linkArticle {
+    width: 1200px;
+    border-left:1px solid map-get($map: $colors, $key:gray-very-light );
+    border-right:1px solid map-get($map: $colors, $key:gray-very-light );
+    border-bottom:1px solid map-get($map: $colors, $key:gray-very-light );
+    padding: 0 20px; 
+    transition: all 180ms ease-in-out;
+}
+
+@mixin article {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    width: 100%;
+    height: 120px;
+    color: map-get($map: $colors, $key: black-light);
+    &--not {
+        justify-content: center;
+        font-size: 1.4em;
+        font-weight: 500;
+        &:hover {
+            background-color: initial;
+        }
+    }
+}
+
+@mixin messageTopic {
+    display: flex;
+        justify-content: center;
+        &__subject {
+            display: flex;
+            border:5px solid map-get($map: $colors, $key:gray-very-light );
+            width: 1000px;
+            &__content {
+                width: 800px;
+                &__date {
+                    margin-top: 15px;
+                    font-size: 0.8em;
+                    color: gray;
+                }
+                &__text {
+                    padding: 40px 40px 30px 0;
+                    line-height: 1.2;
+                    letter-spacing: 0.3px;
+                }
+            }
+            &__userInfo {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 200px;
+                p {
+                    font-size: 1.1em;
+                    font-weight: 600;
+                    margin-top: 15px;
+                }
+                &__img {
+                    border: 1px solid black;
+                    width: 120px;
+                    height: 120px;
+                    margin: 20px 0 30px;
+                }
+            }
+        }
+}
+
+@mixin btn {
+    padding: 8px 10px;
+    border: initial;
+    border-radius: 1px;
+    background-color: map-get($map: $colors, $key:secondary );
+    color: map-get($map: $colors, $key: white-light);
+    cursor: pointer;
+    transition: opacity 150ms ease-in-out;
+    &:hover {
+        opacity: 0.7;
+        transition: opacity 150ms ease-in-out;
+    }
+}

@@ -1,0 +1,37 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h1 {
+        font-size: 2.4em;
+        font-weight: 600;
+        margin: 70px 0 100px;
+    }
+    &__link {
+        background-color: map-get($map: $colors, $key:secondary );
+        color: map-get($map: $colors, $key:white-light );
+        padding: 20px 40px;
+        text-transform: uppercase;
+        font-weight: 500;
+        cursor: pointer;
+        transition: opacity 120ms ease-in-out;
+        &:hover {
+            opacity: 0.6;
+            transition: opacity 120ms ease-in-out;
+        }
+    }
+    &__btns {
+        margin-top: 130px;
+        button {
+            @include btn;
+            margin: 0 5px;
+            transition: all 200ms ease-in-out;
+            &:hover {
+                background-color: map-get($map: $colors, $key:primary );
+                color: map-get($map: $colors, $key:black-light );
+                opacity: 1;
+                transition: all 200ms ease-in-out;
+            }
+        }
+    }
+}

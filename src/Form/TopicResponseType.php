@@ -15,9 +15,17 @@ class TopicResponseType extends AbstractType
     {
         $builder
             ->add('content', CKEditorType::class, [
-                'label' => 'Votre message'
+                'label' => "votre message",
+                'label_attr' => [
+                    'class' => 'topic__form__label',
+                ],
             ])
-            ->add('submit', SubmitType::class)
+            ->add('submit', SubmitType::class, [
+                'label' => 'Envoyer',
+                'attr' => [
+                    'class' => 'topic__form__btnCont__btn'
+                ]
+            ])
         ;
     }
 

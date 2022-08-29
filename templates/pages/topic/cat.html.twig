@@ -4,27 +4,30 @@
 
 {% block body %}
 <main>
-    <h1>Sous categorie de {{ catTitle }}</h1>
-    <p><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > {{ catTitle }}</p>
-    <section>
+    <section class="sub__top">
+        <p class="sub__top__nav"><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > {{ catTitle }}</p>
+        <h1>Sous categorie de {{ catTitle }}</h1>
+        <div class="sub__top__nav__cont">
+            <div class="sub__top__nav__cont__line"></div>
+        </div>
+    </section>
+    <section class="sub__main">
     {% for subCat in subCategories %}
-        <a href="{{ path('app_sub_show', { 'catId': catId, 'id': subCat.id }) }}">
-        <div style="border:1px solid black; padding:15px;width: 400px;">
-            <div>
+        <a class="sub__main__articleLink" href="{{ path('app_sub_show', { 'catId': catId, 'id': subCat.id }) }}">
+        <div class="sub__main__article">
+            <div class="sub__main__article__top">
                 <h2>{{ subCat.title }}</h2>
                 <p>{{ subCat.description }}</p>
             </div>
-            <div>
-                <p>{{ subCat.topics|length }} sujets</p>
-            </div>
-            <div>
-                <p>Dernier sujet : </p>
-                <div style="display:flex;">
-                    <p>
-                        {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.title }}
-                        le {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:i:s') }}
-                    </p>
-                    <p>par {{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
+            <div class="sub__main__article__bot">
+                <div>
+                    <p>{{ subCat.topics|length }} {{ subCat.topics|length is same as 0 ? "sujet" : "sujets" }}</p>
+                </div>
+                <div class="sub__main__article__bot__lastTopic">
+                    <p class="sub__main__article__bot__lastTopic__title">Dernier sujet : </p>
+                    <p>{{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.title }}</p>                      
+                    <p>{{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                    <p>par <span class="sub__main__article__bot__lastTopic__pseudo">{{ subCat.topics|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</span></p>
                 </div>
             </div>
         </div>

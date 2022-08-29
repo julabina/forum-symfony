@@ -4,75 +4,113 @@
 
 {% block body %}
 <main>
-    <h1>Sujet de {{ subCatTitle }}</h1>
-    <p><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > {{ subCatTitle }}</p>
-    <section>
-        <h2>Sujets épinglés</h2>
+    <section class="topics__top">
+        <p class="topics__top__nav"><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > {{ subCatTitle }}</p>
+        <h1>Sujets de {{ subCatTitle }}</h1>
+        <div class="topics__top__nav__cont">
+            <div class="topics__top__nav__cont__line"></div>
+        </div>
+    </section>
+    <section class="topics__main">
+        <div class="topics__main__titleDiv">
+            <h2>Sujets épinglés</h2>
+        </div>
         {% if pinned|length is same as 0 %}
-            <article>
-                <p>Aucun sujet épinglé</p>
-            </article>
+            <div class="topics__main__articleLink--not">
+                <article class="topics__main__article topics__main__article--not">
+                    <p>Aucun sujet épinglé</p>
+                </article>
+            </div>
         {% else %}
             {% for p in pinned %}
-                <a href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': p.id }) }}">
-                <article style="border:1px solid black; padding:15px;width: 1000px;display: flex;justify-content:space-between;">
-                    <div>
+                <a class="topics__main__articleLink" href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': p.id }) }}">
+                <article class="topics__main__article">
+                    <div class="topics__main__article__titles">
                         <h3>{{ p.title }}</h3>
                         <p>{{ p.subTitle }}</p>
                     </div>
-                    <p>Créer par {{ p.user.pseudo }}</p>
-                    <p>{{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|length }} Réponses</p>
+                    <div class="topics__main__article__by">
+                        <p>Créer par</p>
+                        <p class="topics__main__article__by__pseudo">{{ p.user.pseudo }}</p>
+                    </div>
+                        <p class="topics__main__article__resp">{{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|length }} Réponses</p>
                     {% if p.topicResponses|length is not same as 0 %}
-                        <div>
-                            <p>Dernier message par {{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
-                            <p>le {{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                        <div class="topics__main__article__infos">
+                            <p>Dernier message par</p>
+                            <p class="topics__main__article__infos__pseudo">{{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
+                            <p class="topics__main__article__infos__date">{{ p.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:i:s') }}</p>
                         </div>
                     {% else %}
-                        <p>Pas encore de réponse</p>
+                        <div class="topics__main__article__infos">
+                            <p>Créé le</p>
+                            <p class="topics__main__article__infos__date">{{ topic.createdAt|date('d/m/Y à h:i:s') }}</p>
+                        </div>
                     {% endif %}
                 </article>
             </a>
             {% endfor %}
         {% endif %}
     </section>
-    <section>
-        <div class="" style="display:flex; justify-content:space-between;width: 1000px;">
-            <div class="navigation">
-                {{ knp_pagination_render(topics) }}
-            </div>
+    <section class="topics__main">
+        <div class="topics__main__pagination">
+            {% if topics.items|length < 10 and topics.currentPageNumber is same as 1 %}
+                <p>1</p>
+            {% else %}
+                <div class="navigation">
+                    {{ knp_pagination_render(topics) }}
+                </div>
+            {% endif %}
+            
             {% if app.user %}
-                <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button>Creer un sujet</button></a>
+                <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button class="topics__main__pagination__createBtn">Creer un sujet</button></a>
             {% endif %}
         </div>
-        {% for topic in topics %}
-        <a href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': topic.id }) }}">
-            <article style="border:1px solid black; padding:15px;width: 1000px;display: flex;justify-content:space-between;">
-                <div>
-                    <h3>{{ topic.title }}</h3>
-                    <p>{{ topic.subTitle }}</p>
-                </div>
-                <p>Créer par {{ topic.user.pseudo }}</p>
-                <p>{{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|length }} Réponses</p>
-                {% if topic.topicResponses|length is not same as 0 %}
-                    <div>
-                        <p>Dernier message par {{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
-                        <p>le {{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:i:s') }}</p>
-                    </div>
-                {% else %}
-                    <div>
-                        <p>Créé le {{ topic.createdAt|date('d/m/Y à h:i:s') }}</p>
-
-                    </div>
-                {% endif %}
-            </article>
-        </a>
-        {% endfor %}
-        <div class="" style="display:flex; justify-content:space-between;width: 1000px;">
-            <div class="navigation">
-                {{ knp_pagination_render(topics) }}
+        {% if topics|length is same as 0 %}
+            <div class="topics__main__articleLink--not">
+                <article class="topics__main__article topics__main__article--not">
+                    <p>Pas encore de réponse</p>
+                </article>
             </div>
+        {% else %}
+            {% for topic in topics %}
+            <a class="topics__main__articleLink" href="{{ path('app_topic_show', { 'catId': catId, 'subId': subCatId, 'id': topic.id }) }}">
+                <article class="topics__main__article">
+                    <div class="topics__main__article__titles">
+                        <h3>{{ topic.title }}</h3>
+                        <p>{{ topic.subTitle }}</p>
+                    </div>
+                    <div class="topics__main__article__by">
+                        <p>Créer par</p>
+                        <p class="topics__main__article__by__pseudo">{{ topic.user.pseudo }}</p>
+                    </div>
+                    <p class="topics__main__article__resp">{{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|length }} Réponses</p>
+                    {% if topic.topicResponses|length is not same as 0 %}
+                        <div class="topics__main__article__infos">
+                            <p>Dernier message par</p>
+                            <p class="topics__main__article__infos__pseudo">{{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.user.pseudo }}</p>
+                            <p class="topics__main__article__infos__date">{{ topic.topicResponses|sort((a, b) => b.updatedAt <=> a.updatedAt)|first.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                        </div>
+                    {% else %}
+                        <div class="topics__main__article__infos">
+                            <p>Créé le</p>
+                            <p class="topics__main__article__infos__date">{{ topic.createdAt|date('d/m/Y à h:i:s') }}</p>
+                        </div>
+                    {% endif %}
+                </article>
+            </a>
+            {% endfor %}     
+        {% endif %}
+        <div class="topics__main__pagination topics__main__pagination__bot">
+            {% if topics.items|length < 10 %}
+                <p>1</p>
+            {% else %}
+                <div class="navigation">
+                    {{ knp_pagination_render(topics) }}
+                </div>
+            {% endif %}
+
             {% if app.user %}
-                <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button>Creer un sujet</button></a>
+                <a href="{{ path('app_newTopic', { 'catId': catId, 'subId': subCatId }) }}"><button class="topics__main__pagination__createBtn">Creer un sujet</button></a>
             {% endif %}
         </div>
     </section>

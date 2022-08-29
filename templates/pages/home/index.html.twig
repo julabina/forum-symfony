@@ -3,15 +3,9 @@
 {% block title %}Forum - Accueil{% endblock %}
 
 {% block body %}
-<main>
-    <h1>Accueil</h1>
+<main class="home">
+    <h1>Bienvenue {{ app.user ? app.user.pseudo : "" }}</h1>
 
-    <a href="{{ path('app_forum_list') }}">Forum</a>
-    {% if app.user %}
-        <a href="{{ path('app_logout') }}"><button>Se deconnecter</button></a>
-    {% else %}
-        <a href="{{ path('app_login') }}"><button>Se connecter</button></a>
-        <a href="{{ path('app_sign') }}"><button>Creer un compte</button></a>
-    {% endif %} 
+    <a class="home__link" href="{{ path('app_forum_list') }}">Voir toutes les catégories</a>
 </main>
 {% endblock %}

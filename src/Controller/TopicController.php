@@ -101,6 +101,7 @@ class TopicController extends AbstractController
             $message = $form->getData();
             $message->setTopic($topic)
                 ->setUser($this->getUser());
+
             $topic->setUpdatedAt(new \DateTimeImmutable());
                 
             $manager->persist($message);

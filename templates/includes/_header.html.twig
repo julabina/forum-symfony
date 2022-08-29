@@ -1,19 +1,25 @@
 <header>
-    <nav>
-        <ul>
-            <a href="{{ path('app_home') }}"><li>Accueil</li></a>
-            <a href="{{ path('app_forum_list') }}"><li>Forum</li></a>
-            {% if app.user %}
-                <a href="{{ path('app_profil') }}"><li>profil</li></a>
-            {% endif %}
-        </ul>
-        <ul>
-            {% if app.user %}
-                <a href="{{ path('app_logout') }}"><li>Se deconnecter</li></a>
-            {% else %}
-                <a href="{{ path('app_login') }}"><li>Se connecter</li></a>
-                <a href="{{ path('app_sign') }}"><li>S'enregistrer</li></a>
-            {% endif %}
-        </ul>
-    </nav>
+    <a href="{{ path('app_home') }}"><p>TITRE FORUM</p></a>
+    <section class="header__section">
+        <nav>
+            <ul>
+                <a href="{{ path('app_home') }}"><li class="header__btn header__btn__left">Accueil</li></a>
+                <a href="{{ path('app_forum_list') }}"><li class="header__btn header__btn__left">Forums</li></a>
+                {% if app.user %}
+                    <a href="{{ path('app_profil') }}"><li class="header__btn header__btn__left">profil</li></a>
+                {% endif %}
+            </ul>
+            <ul>
+                {% if app.user %}
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        <a href=""><li class="header__btn header__btn__right">Administration</li></a>
+                    {% endif %}
+                    <a href="{{ path('app_logout') }}"><li class="header__btn header__btn__right">Se deconnecter</li></a>
+                {% else %}
+                    <a href="{{ path('app_login') }}"><li class="header__btn header__btn__right">Se connecter</li></a>
+                    <a href="{{ path('app_sign') }}"><li class="header__btn header__btn__right">S'enregistrer</li></a>
+                {% endif %}
+            </ul>
+        </nav>
+    </section>
 </header>
