@@ -3,7 +3,7 @@
 {% block title %}Forum - Modifier profil{% endblock %}
 
 {% block body %}
-<main>
+<main class="profilEdit">
     <h1>Modifier votre profil</h1>
 
     {% for message in app.flashes('success') %}
@@ -17,6 +17,12 @@
         </div>
     {% endfor %}
 
-    {{ form(form) }}
+    <form action="">
+        {{ form_label(form.pseudo) }}
+        {{ form_widget(form.pseudo) }}
+        {{ form_label(form.plainPassword) }}
+        {{ form_widget(form.plainPassword) }}
+        {{ form_row(form.submit) }}
+    </form>
 </main>
 {% endblock %}

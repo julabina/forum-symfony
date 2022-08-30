@@ -25,12 +25,18 @@ class PasswordEditType extends AbstractType
                 'type' => PasswordType::class,
                 'first_options' => [
                     'label' => 'Nouveau mot de passe',
+                    'attr' => [
+                        'class' => 'profilEditPwd__form__cont'
+                    ],
                     'constraints' => [
                         new Assert\NotBlank()
                     ]
                 ],
                 'second_options' => [
                     'label' => 'Confirmer le mot de passe',
+                    'attr' => [
+                        'class' => 'profilEditPwd__form__cont'
+                    ],
                     'constraints' => [
                         new Assert\NotBlank()
                     ]

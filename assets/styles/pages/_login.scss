@@ -1,0 +1,10 @@
+.login {
+    @include form;
+    &__error {
+        color: map-get($map: $colors, $key:error );
+        margin-top: 20px;
+    }
+    &__isLoged {
+        margin-top: 50px;
+    }
+}

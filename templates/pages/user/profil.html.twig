@@ -4,29 +4,32 @@
 
 {% block body %}
 
-<main>
+<main class='profil'>
     <h1>Profil de {{ user.pseudo }}</h1>
     
     <section>
-        <div>
-            <a style="padding: 10px;border:1px solid black;background-color: blue; color: white;margin:0 20px;" href="{{ path('app_profil_edit', { 'id' : user.id }) }}">Modifier le profil</a>
-            <a style="padding: 10px;border:1px solid black;background-color: blue; color: white;margin:0 20px;" href="{{ path('app_profil_editPassword', { 'id' : user.id }) }}">Modifier le mot de passe</a>
-            <a style="padding: 10px;border:1px solid black;background-color: blue; color: white;margin:0 20px;" onClick="return confirm('Voulez vous vraiment supprimer votre compte ?')" href="{{ path('app_profil_delete', { 'id' : user.id }) }}">Supprimer le compte</a>
+        <div class="profil__nav">
+            <a class="profil__nav__btn" href="{{ path('app_profil_edit', { 'id' : user.id }) }}">Modifier le profil</a>
+            <a class="profil__nav__btn" href="{{ path('app_profil_editPassword', { 'id' : user.id }) }}">Modifier le mot de passe</a>
+            <a class="profil__nav__btn" onClick="return confirm('Voulez vous vraiment supprimer votre compte ?')" href="{{ path('app_profil_delete', { 'id' : user.id }) }}">Supprimer le compte</a>
         </div>
     </section>
 
-    <section>
-        <h2>Mes sujets</h2>
+    <section class="profil__topics">
+        <h2 class="profil__topics__title">Mes sujets</h2>
         {% if topics.items|length is not same as 0 %}
         {% for topic in topics %}
-            <a href="{{ path('app_topic_show', { 'catId': topic.subCategory.category.id, 'subId': topic.subCategory.id, 'id': topic.id }) }}">
-                <article style="border:1px solid black; padding:15px;width: 1000px;display: flex;justify-content:space-between;">
-                    <div>
+            <a class='profil__topics__link' href="{{ path('app_topic_show', { 'catId': topic.subCategory.category.id, 'subId': topic.subCategory.id, 'id': topic.id }) }}">
+                <article class='profil__topics__link__article'>
+                    <div class='profil__topics__link__article__title'>
                         <h2>{{ topic.title }}</h2>
                         <p>{{ topic.subTitle }}</p>
                     </div>
-                    <p>Créer par {{ topic.user.pseudo }}</p>
-                    <p>Dernière mise à jour le {{ topic.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                    <p class='profil__topics__link__article__pseudo'>Créer par {{ topic.user.pseudo }}</p>
+                    <div class='profil__topics__link__article__infos'>
+                        <p>Dernière mise à jour</p> 
+                        <p>le {{ topic.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                    </div>
                 </article>
             </a>
         {% endfor %}

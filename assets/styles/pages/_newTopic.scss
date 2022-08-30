@@ -1,0 +1,6 @@
+.newTopic {
+    @include form;
+    input, label {
+        width: 920px;
+    }
+}

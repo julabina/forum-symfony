@@ -1,0 +1,9 @@
+.profilEdit, .profilEditPwd {
+    @include form;
+}
+
+.profilEditPwd__form__cont {
+    display: flex;
+    flex-direction: column;
+}
+

@@ -36,9 +36,15 @@ class SignType extends AbstractType
                 'type' => PasswordType::class,
                 'first_options' => [
                     'label' => 'mot de passe',
+                    'attr' => [
+                        'class' => 'sign__form__cont'
+                    ],
                 ],
                 'second_options' => [
                     'label' => 'confirmation du mot de passe',
+                    'attr' => [
+                        'class' => 'sign__form__cont'
+                    ]
                 ],
                 'invalid_message' => 'Les mot de passe ne correspondent pas.'
             ])

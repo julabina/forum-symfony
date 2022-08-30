@@ -1,0 +1,8 @@
+.sign {
+    @include form;
+
+    &__form__cont {
+        display: flex;
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,35 @@
+footer {
+    display: flex;
+    justify-content: space-between;
+    background: #0E0E0E;
+    width: 100%;
+    min-height: 100px;
+    color: map-get($map: $colors, $key: white-light);
+    padding: 100px ;
+    section {
+        display: flex;
+        justify-content: end;
+    }
+    h2 {
+        font-weight: 700;
+        font-size: 1.7em;
+        border-left: 4px solid red;
+        padding-left: 10px;
+        margin-bottom: 40px;
+    }
+    li {
+        margin: 7px 0;
+    }
+}
+
+.footer {
+    &__title {
+        font-size: 2.2em;
+        font-weight: 700;
+    }
+    &__div {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+    }
+}

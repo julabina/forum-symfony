@@ -5,8 +5,13 @@
 {% endblock %}
 
 {% block body %}
-<main>
+<main class='newTopic'>
     <h1>Nouveau Sujet</h1>
-    {{ form(form) }}
+    
+    {{ form_label(form.title) }}
+    {{ form_widget(form.title) }}
+    {{ form_label(form.subTitle) }}
+    {{ form_widget(form.subTitle) }}
+    {{ form_widget(form.mainContent) }}
 </main>
 {% endblock %}
