@@ -2,6 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Categories;
+use App\Entity\SubCategories;
+use App\Entity\Topics;
 use App\Entity\Users;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -34,15 +37,22 @@ class DashboardController extends AbstractDashboardController
         return $this->render('admin/dashboard.html.twig');
     }
 
-    /* public function configureDashboard(): Dashboard
+    public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
             ->setTitle('Forum Symfony');
-    } */
+    }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        
+        yield MenuItem::section('Utilisateur');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', Users::class);
+
+        yield MenuItem::section('Forum');
+        yield MenuItem::linkToCrud('Categories', 'fas fa-list-ol', Categories::class);
+        yield MenuItem::linkToCrud('Sous-categories', 'fas fa-list-ul', SubCategories::class);
+        yield MenuItem::linkToCrud('Topics', 'fas fa-rectangle-list', Topics::class);
     }
 }

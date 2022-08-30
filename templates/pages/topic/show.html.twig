@@ -35,7 +35,14 @@
                     <div class="topic__subjectCont__subject__userInfo__img"></div>
                 </div>
                 <div class="topic__subjectCont__subject__content">
-                    <p class="topic__subjectCont__subject__content__date">{{ subject.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                    <div class="topic__subjectCont__subject__content__cont">
+                        <p class="topic__subjectCont__subject__content__cont__date">{{ subject.updatedAt|date('d/m/Y à h:i:s') }}</p>
+                        {% if subject.isLock is same as true %}
+                            <a class="topic__subjectCont__subject__content__cont__lockBtn" href="{{ path('admin_lock', {'id' : subject.id}) }}">Débloquer</a>
+                        {% else %}    
+                            <a class="topic__subjectCont__subject__content__cont__lockBtn" href="{{ path('admin_lock', {'id' : subject.id}) }}">Bloquer</a>
+                        {% endif %}
+                    </div>
                     <p class="topic__subjectCont__subject__content__text">{{ subject.mainContent|raw }}</p>
                 </div>
             </div>
@@ -52,7 +59,7 @@
                     <div class="topic__response__article__content__resp">
                         {{ response.content|raw }}
                     </div>
-                    {% if app.user is same as response.user %}
+                    {% if app.user is same as response.user or 'ROLE_ADMIN' in app.user.roles %}
                         <div class="topic__response__article__content__userBtn">
                             <button onClick="displayMessageForm({{ loop.index }})">Modifier</button>
                             <a href=""><button>Supprimer</button></a>

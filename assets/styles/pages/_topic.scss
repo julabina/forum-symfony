@@ -29,6 +29,7 @@
                     letter-spacing: 0.3px;
                 }
                 &__userBtn {
+                    margin-bottom: 20px;
                     button {
                         @include btn;
                         margin-right: 10px;
@@ -71,10 +72,18 @@
             width: 1000px;
             &__content {
                 width: 800px;
-                &__date {
+                &__cont {
+                    display: flex;
+                    justify-content: space-between;
                     margin-top: 15px;
-                    font-size: 0.8em;
-                    color: gray;
+                    &__lockBtn {
+                        @include btn;
+                        margin-right: 10px;
+                    }
+                    &__date {
+                        font-size: 0.8em;
+                        color: gray;
+                    }
                 }
                 &__text {
                     padding: 40px 40px 30px 0;

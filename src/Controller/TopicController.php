@@ -14,6 +14,7 @@ use App\Repository\TopicResponsesRepository;
 use App\Repository\TopicsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,7 +86,8 @@ class TopicController extends AbstractController
             $request->query->getInt('page', $lastPage),
             10
         );
-
+        /* dd($cat);
+        dd($cat->getId()); */
         $options = array(
             'responses' => $messages,
             'subject' => $topicRepository->findOneBy(['id' => $topic->getId()]),
@@ -209,5 +211,21 @@ class TopicController extends AbstractController
             'catId' => $cat->getId(),
             'catTitle' => $cat->getTitle()
         ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/admin/lock/{id}', name:'admin_lock')]
+    public function lock(Topics $topic, EntityManagerInterface $manager): Response {
+
+        if ($topic->isIsLock() === true) {
+            $topic->setIsLock(0);
+        } else {
+            $topic->setIsLock(1);
+        }
+
+        $manager->persist($topic);
+        $manager->flush();
+
+        return $this->redirectToRoute('app_topic_show', ['catId' => $topic->getSubCategory()->getCategory()->getId(), 'subId' => $topic->getSubCategory()->getId(), 'id' => $topic->getId()]);
     }
 }
