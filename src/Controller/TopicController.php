@@ -86,20 +86,8 @@ class TopicController extends AbstractController
             $request->query->getInt('page', $lastPage),
             10
         );
-        /* dd($cat);
-        dd($cat->getId()); */
-        $options = array(
-            'responses' => $messages,
-            'subject' => $topicRepository->findOneBy(['id' => $topic->getId()]),
-            'catId' => $cat->getId(),
-            'catTitle' => $cat->getTitle(),
-            'subId' => $sub->getId(),
-            'subTitle' => $sub->getTitle(),
-            'form' => $form->createView(),
-        );
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $message = $form->getData();
             $message->setTopic($topic)
                 ->setUser($this->getUser());
@@ -112,8 +100,15 @@ class TopicController extends AbstractController
 
             return $this->redirectToRoute('app_topic_show', ['catId' => $catId, 'subId' => $subId, 'id' => $topic->getId()]);
         }
-
-        return $this->render('pages/topic/show.html.twig', $options);
+        return $this->render('pages/topic/show.html.twig', [
+            'responses' => $messages,
+            'subject' => $topicRepository->findOneBy(['id' => $topic->getId()]),
+            'catId' => $cat->getId(),
+            'catTitle' => $cat->getTitle(),
+            'subId' => $sub->getId(),
+            'subTitle' => $sub->getTitle(),
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -213,6 +208,13 @@ class TopicController extends AbstractController
         ]);
     }
 
+    /**
+     * lock one topic
+     * 
+     * @param Topics $topic, 
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin/lock/{id}', name:'admin_lock')]
     public function lock(Topics $topic, EntityManagerInterface $manager): Response {

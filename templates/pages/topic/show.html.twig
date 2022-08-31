@@ -37,10 +37,12 @@
                 <div class="topic__subjectCont__subject__content">
                     <div class="topic__subjectCont__subject__content__cont">
                         <p class="topic__subjectCont__subject__content__cont__date">{{ subject.updatedAt|date('d/m/Y à h:i:s') }}</p>
-                        {% if subject.isLock is same as true %}
-                            <a class="topic__subjectCont__subject__content__cont__lockBtn" href="{{ path('admin_lock', {'id' : subject.id}) }}">Débloquer</a>
-                        {% else %}    
-                            <a class="topic__subjectCont__subject__content__cont__lockBtn" href="{{ path('admin_lock', {'id' : subject.id}) }}">Bloquer</a>
+                        {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+                            {% if subject.isLock is same as true %}
+                                <a class="topic__subjectCont__subject__content__cont__lockBtn" href="{{ path('admin_lock', {'id' : subject.id}) }}">Débloquer</a>
+                            {% else %}    
+                                <a class="topic__subjectCont__subject__content__cont__lockBtn" href="{{ path('admin_lock', {'id' : subject.id}) }}">Bloquer</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                     <p class="topic__subjectCont__subject__content__text">{{ subject.mainContent|raw }}</p>
@@ -59,10 +61,10 @@
                     <div class="topic__response__article__content__resp">
                         {{ response.content|raw }}
                     </div>
-                    {% if app.user is same as response.user or 'ROLE_ADMIN' in app.user.roles %}
+                    {% if (app.user is not null) and (app.user is same as response.user or 'ROLE_ADMIN' in app.user.roles) %}
                         <div class="topic__response__article__content__userBtn">
                             <button onClick="displayMessageForm({{ loop.index }})">Modifier</button>
-                            <a href=""><button>Supprimer</button></a>
+                            <a onClick="return confirm('Voulez vous vraiment supprimer ce commentaire ?')" href="{{ path('app_resp_delete', {'id': response.id}) }}"><button>Supprimer</button></a>
                         </div>  
                     {% endif %}
                 </div>
@@ -77,13 +79,12 @@
         <section class="topic__formSection">
             {% if subject.isLock is same as false %}
                 {% if app.user %}
-                    {# {{ form(form, { 'attr' : {'class' : 'topic__form'}}) }} #}
-                    <form class="topic__form">
+                    {{ form_start(form) }}
                         {{ form_widget(form.content) }}
                         <div class="topic__form__btnCont">
                             {{ form_widget(form.submit) }}
                         </div>
-                    </form>
+                    {{ form_end(form) }}
                 {% else %}
                     <div class="topic__form__closed">
                         <p>Vous devez etre connecter pour poster</p>

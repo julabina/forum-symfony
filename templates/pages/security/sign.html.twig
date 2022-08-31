@@ -9,7 +9,7 @@
     <h1>Creer un compte</h1>
 
     {# {{ form(form) }} #}
-    <form action="">
+    {{ form_start(form) }}
         {# {{ form_row(form.pseudo, {'attr': {'class' : 'test'}}) }}
         {{ form_row(form.email) }}
         {{ form_row(form.plainPassword) }}
@@ -27,6 +27,6 @@
         {{ form_errors(form.plainPassword) }}
         {{ form_widget(form.plainPassword) }}
         {{ form_row(form.submit) }}
-    </form>
+    {{ form_end(form) }}
 </main>
 {% endblock %}
