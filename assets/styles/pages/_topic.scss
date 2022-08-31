@@ -76,9 +76,12 @@
                     display: flex;
                     justify-content: space-between;
                     margin-top: 15px;
-                    &__lockBtn {
-                        @include btn;
-                        margin-right: 10px;
+                    &__optionsCont {
+                        display: flex;
+                        &__lockBtn, &__userBtn {
+                            @include btn;
+                            margin-right: 10px;
+                        }
                     }
                     &__date {
                         font-size: 0.8em;
@@ -89,6 +92,31 @@
                     padding: 40px 40px 30px 0;
                     line-height: 1.2;
                     letter-spacing: 0.3px;
+                }
+                &__form {
+                    margin: 15px 50px 0 0;
+                    &__inputs {
+                        display: flex;
+                        flex-direction: column;
+                        input {
+                            height: 35px;
+                            margin-bottom: 15px;
+                            padding-left: 15px;
+                        }
+                    }
+                    &__submitCont {
+                        display: flex;
+                        justify-content: center;
+                        margin: 20px 0;
+                        button {
+                            @include btn;
+                        }
+                    }
+                }
+                &__display {
+                    &--hidden {
+                        display: none;
+                    }
                 }
             }
             &__userInfo {

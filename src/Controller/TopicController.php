@@ -6,6 +6,7 @@ use App\Entity\Categories;
 use App\Entity\SubCategories;
 use App\Entity\TopicResponses;
 use App\Entity\Topics;
+use App\Form\EditTopicType;
 use App\Form\NewTopicType;
 use App\Form\TopicResponseType;
 use App\Repository\CategoriesRepository;
@@ -15,6 +16,7 @@ use App\Repository\TopicsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -72,6 +74,9 @@ class TopicController extends AbstractController
 
         $form = $this->createForm(TopicResponseType::class);
         $form->handleRequest($request);
+        
+        $formEdit = $this->createForm(EditTopicType::class, $topic);
+        $formEdit->handleRequest($request);
 
         $nbrOfTopics = $responseRepository->findBy(['topic' => $topic->getId()]);
 
@@ -100,6 +105,17 @@ class TopicController extends AbstractController
 
             return $this->redirectToRoute('app_topic_show', ['catId' => $catId, 'subId' => $subId, 'id' => $topic->getId()]);
         }
+        
+        if ($formEdit->isSubmitted() && $formEdit->isValid()) {
+            $topicUpdated = $formEdit->getData();
+            $topicUpdated->setUpdatedAt(new \DateTimeImmutable());
+                    
+            $manager->persist($topicUpdated);
+            $manager->flush();
+    
+            return $this->redirectToRoute('app_topic_show', ['catId' => $catId, 'subId' => $subId, 'id' => $topic->getId()]);
+        }
+
         return $this->render('pages/topic/show.html.twig', [
             'responses' => $messages,
             'subject' => $topicRepository->findOneBy(['id' => $topic->getId()]),
@@ -108,6 +124,7 @@ class TopicController extends AbstractController
             'subId' => $sub->getId(),
             'subTitle' => $sub->getTitle(),
             'form' => $form->createView(),
+            'formEdit' => $formEdit->createView(),
         ]);
     }
 
@@ -229,5 +246,25 @@ class TopicController extends AbstractController
         $manager->flush();
 
         return $this->redirectToRoute('app_topic_show', ['catId' => $topic->getSubCategory()->getCategory()->getId(), 'subId' => $topic->getSubCategory()->getId(), 'id' => $topic->getId()]);
+    }
+
+    /**
+     * Delete one topic
+     * 
+     * @param Topics $topic 
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    #[Security("(is_granted('ROLE_USER') and user === topic.getUser()) or is_granted('ROLE_ADMIN')")]
+    #[Route('/topicDelete/{id}', name: 'app_topic_delete')] 
+    public function delete(Topics $topic, EntityManagerInterface $manager): Response
+    {
+        $manager->remove($topic);
+        $manager->flush();
+
+        return $this->redirectToRoute('app_sub_show', [
+            'catId' => $topic->getSubCategory()->getCategory()->getId(),
+            'id' => $topic->getSubCategory()->getId()
+        ]);
     }
 }
