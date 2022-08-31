@@ -3,11 +3,6 @@
 {% block title %}Forum - {{ subject.title }}{% endblock %}
 
 {% block body %}
-    <style>
-        .message__form--hidden {
-            display:none;
-        }
-    </style>
     <main>
         <section class="topic__top">
             <p class="topic__top__nav"><a href="{{ path('app_home') }}">Accueil</a> > <a href="{{ path('app_forum_list') }}">Forum</a> > <a href="{{ path('app_cat_show', { 'id': catId }) }}">{{ catTitle }}</a> > <a href="{{ path('app_sub_show', { 'catId': catId, 'id': subId }) }}">{{ subTitle }}</a> > {{ subject.title }}</p>
@@ -21,7 +16,7 @@
             <div class="topic__top__nav__cont__line"></div>
         </div>
         </section>
-
+        
         <section class="topic__pagination">
             <div class="navigation topic__pagination__nav">
                 {{ knp_pagination_render(responses) }}
@@ -83,7 +78,7 @@
                     </div>
                     {% if ((app.user is not null) and (app.user is same as response.user or 'ROLE_ADMIN' in app.user.roles)) and subject.isLock is same as false %}
                         <div class="topic__response__article__content__userBtn">
-                            <button onClick="displayMessageForm({{ loop.index }})">Modifier</button>
+                            <a href="{{ path('app_topic_show', {'catId': response.topic.subCategory.category.id ,'subId': response.topic.subCategory.id,'id': response.topic.id, 'msg': response.id}) }}"><button>Modifier</button></a>
                             <a onClick="return confirm('Voulez vous vraiment supprimer ce commentaire ?')" href="{{ path('app_resp_delete', {'id': response.id}) }}"><button>Supprimer</button></a>
                         </div>  
                     {% endif %}
@@ -116,16 +111,23 @@
                 </div>
             {% endif %}
         </section>
+        {% if (app.request.get('msg') and app.user) and ((app.user is same as respForEdit.user) or 'ROLE_ADMIN' in app.user.roles) %}
+        <section class="topic__modalCont">
+            <div class="topic__modalCont__modal">
+                <div class="topic__modalCont__modal__cancelBtn">
+                    <a href="{{ path('app_topic_show', { 'catId': subject.subCategory.category.id , 'subId': subject.subCategory.id , 'id': subject.id }) }}"><button>Annuler</button></a>
+                </div>
+                {{ form_start(formEditResp) }}
+                    {{ form_widget(formEditResp.content) }}
+                    <div class="topic__modalCont__modal__btnCont">
+                        {{ form_widget(formEditResp.submit) }}
+                    </div>
+                {{ form_end(formEditResp) }}
+            </div>
+        </section>
+        {% endif %}
     </main>
     <script>
-        const displayMessageForm = (repId) => {
-            const message = document.querySelector('.message__form' + repId);
-            if(message.classList.contains('message__form--hidden')) {
-                message.classList.remove('message__form--hidden');
-            } else {
-                message.classList.add('message__form--hidden');
-            }
-        }
         const displayTopicForm = () => {
             const topicContent = document.querySelectorAll('.topic__subjectCont__subject__content__display');
             

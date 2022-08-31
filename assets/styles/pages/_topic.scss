@@ -165,4 +165,36 @@
         display: flex;
         justify-content: center;
     }
+    &__modalCont {
+        position: fixed;
+        top: 0;bottom: 0;
+        left: 0;right: 0;
+        background: rgba(0, 0, 0, 0.781);
+        &__modal {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 2px;
+            width: 450px;
+            background: map-get($colors, white-light);
+            padding: 20px;
+            &__btnCont {
+                display: flex;
+                justify-content: center;
+                button {
+                    @include btn;
+                    margin: 15px 5px 0;
+                }
+            }
+            &__cancelBtn {
+                display: flex;
+                justify-content: end;
+                button {
+                    @include btn;
+                    margin-bottom: 5px;
+                }
+            }
+        }
+    }
 }

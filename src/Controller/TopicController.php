@@ -6,6 +6,7 @@ use App\Entity\Categories;
 use App\Entity\SubCategories;
 use App\Entity\TopicResponses;
 use App\Entity\Topics;
+use App\Form\EditResponseType;
 use App\Form\EditTopicType;
 use App\Form\NewTopicType;
 use App\Form\TopicResponseType;
@@ -68,6 +69,7 @@ class TopicController extends AbstractController
         EntityManagerInterface $manager,
     ): Response 
     {
+        $resp = null;
 
         $cat = $catRepository->findOneBy(['id' => $catId]);
         $sub = $subRepository->findOneBy(['id' => $subId]);
@@ -77,6 +79,17 @@ class TopicController extends AbstractController
         
         $formEdit = $this->createForm(EditTopicType::class, $topic);
         $formEdit->handleRequest($request);
+        if(isset($_GET['msg']) && $_GET['msg'] !== '') {
+            $resp = $responseRepository->findOneBy(['id' => $_GET['msg']]);
+            if ($resp !== null) {
+                $formEditResp = $this->createForm(EditResponseType::class, $resp);
+            } else {
+                $formEditResp = $this->createForm(EditResponseType::class);
+            }  
+        } else {
+            $formEditResp = $this->createForm(EditResponseType::class);
+        }
+        $formEditResp->handleRequest($request);
 
         $nbrOfTopics = $responseRepository->findBy(['topic' => $topic->getId()]);
 
@@ -116,6 +129,17 @@ class TopicController extends AbstractController
             return $this->redirectToRoute('app_topic_show', ['catId' => $catId, 'subId' => $subId, 'id' => $topic->getId()]);
         }
 
+        if ($formEditResp->isSubmitted() && $formEditResp->isValid()) {
+
+            $responseUpdated = $formEditResp->getData();
+            $responseUpdated->setUpdatedAt(new \DateTimeImmutable());
+                    
+            $manager->persist($responseUpdated);
+            $manager->flush();
+    
+            return $this->redirectToRoute('app_topic_show', ['catId' => $catId, 'subId' => $subId, 'id' => $topic->getId()]);
+        }
+
         return $this->render('pages/topic/show.html.twig', [
             'responses' => $messages,
             'subject' => $topicRepository->findOneBy(['id' => $topic->getId()]),
@@ -125,6 +149,8 @@ class TopicController extends AbstractController
             'subTitle' => $sub->getTitle(),
             'form' => $form->createView(),
             'formEdit' => $formEdit->createView(),
+            'formEditResp' => $formEditResp->createView(),
+            'respForEdit' => $resp
         ]);
     }
 
