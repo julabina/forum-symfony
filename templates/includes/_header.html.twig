@@ -4,7 +4,7 @@
         <nav>
             <ul>
                 <a href="{{ path('app_home') }}"><li class="header__btn header__btn__left">Accueil</li></a>
-                <a href="{{ path('app_forum_list') }}"><li class="header__btn header__btn__left">Forums</li></a>
+                <a href="{{ path('app_forum_list') }}"><li class="header__btn header__btn__left">Forum</li></a>
                 {% if app.user %}
                     <a href="{{ path('app_profil') }}"><li class="header__btn header__btn__left">profil</li></a>
                 {% endif %}

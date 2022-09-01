@@ -16,7 +16,9 @@
     <a class="cat__main__link" href="{{ path('app_cat_show', { 'id': category.id }) }}">
         <div class="cat__main__category">
             <h2>{{ category.title }}</h2>
-            <p>{{ category.description }}</p>
+            <div class="cat__main__category__content">
+                {{ category.description|raw }}
+            </div>
         </div>    
     </a>
     {% endfor %}
